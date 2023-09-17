@@ -25,9 +25,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!loading && data) {
-      const parsedData = data.inputs.edges.map((edge) => {
+      const parsedData = data.inputs.edges.slice(4).map((edge) => {
         const payloadString = Web3.utils.hexToAscii(edge.node.payload)
         console.log('Payload String:', payloadString)
+
+        // Split the string into an array of key-value pairs
+        const keyValuePairs = payloadString.split(',')
+
+        // Initialize an empty object to store the parsed data
+        const parsedData = {}
+
+        // Iterate over the key-value pairs and add them to the object
+        for (const pair of keyValuePairs) {
+          const [key, value] = pair.split(':')
+          parsedData[key] = value
+        }
+
+        console.log(parsedData)
 
         try {
           return JSON.parse(payloadString)
@@ -44,26 +58,43 @@ export default function Home() {
   console.log(data, 'data')
 
   return (
-    <main className='flex justify-center bg-gradient-to-t from-red-300 to- '>
+    <main className='flex justify-center bg-gradient-to-t from-red-300 to-blue-700 h-full '>
       <div>
-        {jsonData.map((jsonObject, index) => (
-          <div key={index} className='container mx-auto p-4'>
-            <div className='bg-white p-8 rounded-lg shadow-md'>
-              <img
-                src='https://via.placeholder.com/150'
-                alt='Profile Picture'
-                className='w-32 h-32 rounded-full mx-auto'
-              />
-              <h2 className='text-2xl font-semibold text-center mt-4'>
-                {jsonObject?.name}
-              </h2>
-              <p className='text-gray-600 text-center'>{jsonObject?.role}</p>
-              <div className='mt-4'>
-                <p className='mt-2'>{jsonObject?.bio}</p>
+        {data?.inputs.edges.slice(4).map((edge, index) => {
+          const payloadString = Web3.utils.hexToAscii(edge.node.payload)
+
+          // Split the string by commas to get an array of key-value pairs
+          const keyValuePairs = payloadString.split(',')
+
+          // Initialize an empty object to store the parsed data
+          const parsedData = {}
+
+          // Iterate over the key-value pairs and add them to the object
+          for (const pair of keyValuePairs) {
+            const [key, value] = pair.split(':')
+            // Remove any leading or trailing spaces from the key and value
+            parsedData[key.trim()] = value.trim()
+          }
+
+          return (
+            <div key={index} className='container mx-auto p-4 '>
+              <div className='bg-white p-8 rounded-lg shadow-md w-[500px]'>
+                <img
+                  src='https://via.placeholder.com/150'
+                  alt='Profile Picture'
+                  className='w-32 h-32 rounded-full mx-auto'
+                />
+                <h2 className='text-2xl font-semibold text-center mt-4'>
+                  {parsedData?.name}
+                </h2>
+                <p className='text-gray-600 text-center'>{parsedData?.role}</p>
+                <div className='mt-4'>
+                  <p className='mt-2 text-center'>{parsedData?.bio}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </main>
   )
