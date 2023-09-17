@@ -2,17 +2,26 @@
 
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 type Props = {
-  children?: React.ReactNode;
-};
+  children?: React.ReactNode
+}
+
+// Initialize Apollo Client
+const client = new ApolloClient({
+  uri: process.env.GRAPHQL_URL,
+  cache: new InMemoryCache(),
+})
 
 export const Provider = ({ children }: Props) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider>{children}</SessionProvider>
-    </QueryClientProvider>
-  );
-};
+    <ApolloProvider client={client}>
+      <QueryClientProvider client={queryClient}>
+        <SessionProvider>{children}</SessionProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
+  )
+}
