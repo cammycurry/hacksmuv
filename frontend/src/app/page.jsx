@@ -58,8 +58,8 @@ export default function Home() {
   console.log(data, 'data')
 
   return (
-    <main className='flex justify-center bg-gradient-to-t from-red-300 to-blue-700 h-full '>
-      <div>
+    <main className='flex justify-center bg-gradient-to-t from-red-300 to-blue-700 '>
+      <div className='h-full'>
         {data?.inputs.edges.slice(4).map((edge, index) => {
           const payloadString = Web3.utils.hexToAscii(edge.node.payload)
 
@@ -77,7 +77,7 @@ export default function Home() {
           }
 
           return (
-            <div key={index} className='container mx-auto p-4 '>
+            <div key={index} className='container mx-auto p-4 h-full'>
               <div className='bg-white p-8 rounded-lg shadow-md w-[500px]'>
                 <img
                   src='https://via.placeholder.com/150'
