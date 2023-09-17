@@ -1,4 +1,4 @@
-# hacksmuv
+# HackSMUV
 
 ## Frontend
 
