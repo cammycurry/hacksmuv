@@ -9,7 +9,7 @@ export default function Login() {
   const signInWithGoogle = () => {
     setGoogleLoading(true);
     signIn("google", {
-      callbackUrl: "http://localhost:3000/chat",
+      callbackUrl: "http://localhost:3000/profile",
     });
     setGoogleLoading(false);
   };
